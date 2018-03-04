@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-//Small change made to player.cpp by Jethin
+//Small change made to player.cpp by Jethin Gowda
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
