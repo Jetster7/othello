@@ -67,6 +67,17 @@ bool Board::hasMoves(Side side) {
     return false;
 }
 
+Move Board::firstMove(Side side)
+{
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Move move(i, j);
+            if (checkMove(&move, side)) return Move;
+        }
+    }
+    return false;
+}
+
 /*
  * Returns true if a move is legal for the given side; false otherwise.
  */
