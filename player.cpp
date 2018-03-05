@@ -1,5 +1,5 @@
 #include "player.hpp"
-
+#define AI 1
 //Small change made to player.cpp by Jethin Gowda
 //Matthew was here!!!!
 
@@ -24,8 +24,6 @@ Player::Player(Side side) {
     }
 
     myside = side;
-
-    cerr << myside  << endl;
 
     if(myside == BLACK)
     {
@@ -80,6 +78,19 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         return nullptr;
     }
 
+    if(AI == 0)
+    {
+        return randMove();
+    }
+    else if(AI == 1)
+    {
+        return greedyMove();
+    }
+
+}
+
+Move *Player::randMove()
+{
     while(true)
     {
         int x = rand() % 8;
@@ -92,6 +103,31 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         }
 
     }
+}
 
-    return nullptr;
+Move *Player::greedyMove()
+{
+    int score = brd.count(myside) - brd.count(otherside);
+    Move *move = nullptr;
+    for(int x = 0; x < 8; x++)
+    {
+        for(int y = 0; y < 8; y++)
+        {
+            Move *m = new Move(x,y);
+            if (brd.checkMove(m, myside))
+            {
+                Board *tempbrd = brd.copy();
+                tempbrd->doMove(m, myside);
+                int tempscore = tempbrd->count(myside) - tempbrd->count(otherside);
+                if(tempscore > score)
+                {
+                    score = tempscore;
+                    move = m;
+                }
+                delete tempbrd;
+            }
+        }
+    }
+    brd.doMove(move, myside);
+    return move;
 }
