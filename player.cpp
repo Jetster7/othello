@@ -82,7 +82,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
     while(true)
     {
-        int x  = rand() % 8;
+        int x = rand() % 8;
         int y = rand() % 8;
         Move *m = new Move(x, y);
         if (brd.checkMove(m, myside))
@@ -90,8 +90,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
             brd.doMove(m, myside);
             return m;
         }
-    }
 
+    }
 
     return nullptr;
 }
