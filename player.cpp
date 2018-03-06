@@ -15,8 +15,6 @@ Player::Player(Side side) {
     testingMinimax = true;
     brd = new Board();
 
-    cerr << "My color is (0: white  1:black): " << side << endl;
-
     myside = side;
 
     if(myside == BLACK)
