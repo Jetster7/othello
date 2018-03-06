@@ -13,6 +13,7 @@ public:
 	Player(Side side);
 	~Player();
 
+	Move *smartHeuristic();
 	Move *doMove(Move *opponentsMove, int msLeft);
 	Move *randMove();
 	Move *greedyMove();

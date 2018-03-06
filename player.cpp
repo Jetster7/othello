@@ -1,5 +1,5 @@
 #include "player.hpp"
-#define AI 1
+#define AI 2
 //Small change made to player.cpp by Jethin Gowda
 //Matthew was here!!!!
 
@@ -86,6 +86,10 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     {
         return greedyMove();
     }
+    else if(AI == 2)
+    {
+        return smartHeuristic();
+    }
 
 }
 
@@ -119,6 +123,71 @@ Move *Player::greedyMove()
                 Board *tempbrd = brd.copy();
                 tempbrd->doMove(m, myside);
                 int tempscore = tempbrd->count(myside) - tempbrd->count(otherside);
+                if(tempscore > score)
+                {
+                    score = tempscore;
+                    move = m;
+                }
+                delete tempbrd;
+            }
+        }
+    }
+    brd.doMove(move, myside);
+    return move;
+}
+
+Move *Player::smartHeuristic()
+{
+    int score = -999;
+    bool xcorn = false;
+    bool ycorn = false;
+    bool xedge = false;
+    bool yedge = false;
+    Move *move = nullptr;
+    for(int x = 0; x < 8; x++)
+    {
+        if(x == 1 || x == 6)
+        {
+            xedge = true;
+        }
+        else if(x == 0 || x == 7)
+        {
+            xcorn = true;
+        }
+        else
+        {
+            xedge = false;
+            xcorn = false;
+        }
+        for(int y = 0; y < 8; y++)
+        {
+            if(y == 1 || y == 6)
+            {
+                yedge = true;
+            }
+            else if(y == 0 || y == 7)
+            {
+                ycorn = true;
+            }
+            else
+            {
+                yedge = false;
+                ycorn = false;
+            }
+            Move *m = new Move(x,y);
+            if (brd.checkMove(m, myside))
+            {
+                Board *tempbrd = brd.copy();
+                tempbrd->doMove(m, myside);
+                int tempscore = tempbrd->count(myside) - tempbrd->count(otherside);
+                if(xcorn && ycorn && tempscore > 0)
+                {
+                    tempscore *= 3;
+                }
+                if(((xedge && ycorn) || (xcorn && yedge)) && tempscore > 0)
+                {
+                    tempscore *= -3;
+                }
                 if(tempscore > score)
                 {
                     score = tempscore;
