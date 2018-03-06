@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 #include "common.hpp"
 #include "board.hpp"
 using namespace std;
@@ -13,18 +14,24 @@ public:
 	Player(Side side);
 	~Player();
 
-	Move *smartHeuristic();
 	Move *doMove(Move *opponentsMove, int msLeft);
 	Move *randMove();
-	Move *greedyMove();
+	Move *greedyMove(Board *board, Side side1, Side side2);
+	Move *smartHeuristic();
+	Move *minimax(); //2-ply
+	vector<Move*> validMoves(Board* b, Side s);
+	void setBoard(Board* board);
+
+
+
     // Flag to tell if the player is running within the test_minimax context
 	bool testingMinimax;
 
 private:
-	Board brd;
+	Board* brd;
 	Side myside;
 	Side otherside;
-	bool checked[8][8];
+	
 
 };
 
