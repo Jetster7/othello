@@ -1,0 +1,3 @@
+The two group members for this project were Jethin Gowda and Min Hyuk (Matthew) Kim. Each group member contributed considerably to the project. Each member would usually work on a different "version" of the AI. In this way, the code base built by the previous version would be used and built upon further to continually create the algorithm. For example, Matthew created the first random AI, which Jethin then improved to make the naive heuristic AI. In total, this method of iterative improvement led each member to contribute fairly and substantially to the project.
+
+We began with 

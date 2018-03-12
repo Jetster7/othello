@@ -267,6 +267,14 @@ Move *Player::minimax()
 
 }
 
+Move *Player::minimax_nply(int depth, int max_depth)
+{
+    if
+
+
+} 
+
+
 
 vector<Move*> Player::validMoves(Board* b, Side s)
 {
@@ -294,4 +302,7 @@ void Player::setBoard(Board* board)
     brd = board;
 }
 
-
+int Player::score(Board *board)
+{
+    return board->count(myside) - board->count(otherside);
+}
