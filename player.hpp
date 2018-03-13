@@ -18,11 +18,11 @@ public:
 	Move *randMove();
 	Move *greedyMove(Board *board, Side side1, Side side2);
 	Move *smartHeuristic();
-	Move *minimax(int depth, int max_depth); //2-ply
-	Move *minimax_nply(int depth, int max_depth); //n ply
+	Move *minimax(); //2-ply
+	MoveValue minimax_nply(Board *board, int alpha, int beta, int max_depth, Side s); //n ply
 	vector<Move*> validMoves(Board* b, Side s);
 	void setBoard(Board* board);
-	int score(Board *board)
+	int score(Board *board);
 
 
 

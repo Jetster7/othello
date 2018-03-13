@@ -1,5 +1,5 @@
 #include "player.hpp"
-#define AI 3
+#define AI 4
 //Small change made to player.cpp by Jethin Gowda
 //Matthew was here!!!!
 
@@ -86,6 +86,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     else if (AI == 3)
     {
         return minimax();
+    }
+    else if(AI == 4)
+    {
+        MoveValue move = minimax_nply(brd, -1000, 1000, 0, myside);
+        brd->doMove(move.move, myside);
+        return move.move;
     }
 
 }
@@ -267,11 +273,62 @@ Move *Player::minimax()
 
 }
 
-Move *Player::minimax_nply(int depth, int max_depth)
+MoveValue Player::minimax_nply(Board *board, int alpha, int beta, int max_depth, Side s)
 {
-    if
+    vector<Move*> moves = validMoves(board, s); //set of valid moves
+    bool ismax = (s == myside); //tells which side you are on
+    MoveValue returnMove;
+    MoveValue bestMove;
 
+    if(max_depth == 5 || !board->hasMoves(s)) //depth meeting condition
+    {
+        return MoveValue(score(board));
+    }
 
+    if(ismax)
+    {
+        for(int x = 0; x < moves.size(); x++)
+        {
+            Move *currentMove = moves[x];
+            Board *tempbrd = board->copy();
+            tempbrd->doMove(moves[x], myside);
+            returnMove = minimax_nply(tempbrd, alpha, beta, max_depth + 1, otherside);
+            delete tempbrd;
+            if(returnMove.value > alpha)
+            {
+                alpha = returnMove.value;
+                bestMove.move = currentMove;
+                bestMove.value = alpha;
+            }
+            if(beta <= alpha)
+            {
+                break;
+            }
+        }
+        return bestMove;
+    }
+    else
+    {
+        for(int x = 0; x < moves.size(); x++)
+        {
+            Move *currentMove = moves[x];
+            Board *tempbrd = board->copy();
+            tempbrd->doMove(moves[x], myside);
+            returnMove = minimax_nply(tempbrd, alpha, beta, max_depth + 1, myside);
+            delete tempbrd;
+            if(returnMove.value < beta)
+            {
+                beta = returnMove.value;
+                bestMove.move = currentMove;
+                bestMove.value = beta;
+            }
+            if(beta <= alpha)
+            {
+                break;
+            }
+        }
+        return bestMove;
+    }
 } 
 
 

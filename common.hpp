@@ -6,7 +6,7 @@ enum Side {
 };
 
 class Move {
-   
+
 public:
     int x, y;
     Move(int x, int y) {
@@ -20,6 +20,28 @@ public:
 
     void setX(int x) { this->x = x; }
     void setY(int y) { this->y = y; }
+};
+
+class MoveValue {
+
+public:
+    int value;
+    Move * move;
+    MoveValue()
+    {
+        this->value = 0;
+        this->move = nullptr;
+    }
+    MoveValue(int tempvalue)
+    {
+        this->value = tempvalue;
+        this->move = nullptr;
+    }
+    MoveValue(int tempvalue, Move *tempmove)
+    {
+        this->value = tempvalue;
+        this->move = tempmove;
+    }
 };
 
 #endif
