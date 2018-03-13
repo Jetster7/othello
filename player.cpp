@@ -280,9 +280,16 @@ MoveValue Player::minimax_nply(Board *board, int alpha, int beta, int max_depth,
     MoveValue returnMove;
     MoveValue bestMove;
 
-    if(max_depth == 5 || !board->hasMoves(s)) //depth meeting condition
+    if(max_depth == 4 || !board->hasMoves(s)) //depth meeting condition
     {
-        return MoveValue(score(board));
+        if(ismax)
+        {
+            return MoveValue(score(board));
+        }
+        else
+        {
+            return MoveValue(-score(board));
+        }
     }
 
     if(ismax)
