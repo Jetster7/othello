@@ -218,7 +218,78 @@ Move *Player::smartHeuristic()
     return move;
 }
 
+int Player::hscore(Board *board, Move *m)
+{
+    bool xcorn = false;
+    bool ycorn = false;
+    bool xedge = false;
+    bool yedge = false;
+    int x = m->getX();
+    int y = m->getY();
 
+    if(x == 1 || x == 6)
+    {
+        xedge = true;
+        xcorn = false;
+    }
+    else if(x == 0 || x == 7)
+    {
+        xcorn = true;
+        xedge = false;
+    }
+    else
+    {
+        xedge = false;
+        xcorn = false;
+    }
+
+    if(y == 1 || y == 6)
+    {
+        yedge = true;
+        ycorn = false;
+    }
+    else if(y == 0 || y == 7)
+    {
+        ycorn = true;
+        yedge = false;
+    }
+    else
+    {
+        yedge = false;
+        ycorn = false;
+    }
+    int tempscore = board->count(myside) - board->count(otherside);
+    if(xcorn && ycorn)
+    {
+        if(tempscore > 0)
+            {tempscore *= 3;}
+        else
+            {tempscore *= -3;}
+    }
+    else if(((xedge && ycorn) || (xcorn && yedge)) && tempscore > 0)
+    {
+        if(tempscore > 0)
+            {tempscore *= -2;}
+        else
+            {tempscore *= 2;}
+    }
+    else if(xedge && yedge && tempscore > 0)
+    {
+        if(tempscore > 0)
+            {tempscore *= -3;}
+        else
+            {tempscore *= 3;}
+    }
+    else if((xedge || yedge) && tempscore > 0)
+    {
+        if(tempscore > 0)
+            {tempscore *= 2;}
+        else
+            {tempscore *= -2;}
+    }
+
+
+}
 //minimax for 2-ply
 Move *Player::minimax() 
 {
@@ -231,25 +302,40 @@ Move *Player::minimax()
         tempbrd->doMove(first[x], myside);
         vector<Move*> second = validMoves(tempbrd, otherside);
         int min = 999;
-
         for(int y = 0; y<second.size(); y++)
         {
             Board *tempbrd1 = tempbrd->copy();
             tempbrd1->doMove(second[y], otherside);
-            int score1 = tempbrd1->count(myside) - tempbrd1->count(otherside);
-            if(score1 < min)
+            vector<Move*> third = validMoves(tempbrd1, myside);
+            for(int z = 0; z < third.size(); z++)
             {
-                min = score1;
+                Board *tempbrd2 = tempbrd1->copy();
+                tempbrd2->doMove(third[z], myside);
+                vector<Move*> fourth = validMoves(tempbrd2, otherside);
+                for(int w = 0; w < fourth.size(); w++)
+                {
+                    Board *tempbrd3 = tempbrd2->copy();
+                    tempbrd3->doMove(fourth[w],otherside);
+                    vector<Move*> fifth = validMoves(tempbrd3, myside);
+                    for(int a = 0; a < fifth.size(); a++)
+                    {
+                        Board *tempbrd4 = tempbrd3->copy();
+                        tempbrd4->doMove(fifth[a],myside);
+                        int score1 = hscore(tempbrd4, fifth[a]);
+                        if(score1 < min)
+                        {
+                            min = score1;
+                        }
+                        delete tempbrd4;
+                    }
+                    delete tempbrd3;
+                }
+                delete tempbrd2;
             }
-
             delete tempbrd1;
-
         }
-
         lowest.push_back(min);
-
         delete tempbrd;
-
     }
 
     int moveindex = 0;
@@ -267,10 +353,7 @@ Move *Player::minimax()
     }
 
     brd->doMove(first[moveindex], myside);
-
     return first[moveindex];
-
-
 }
 
 MoveValue Player::minimax_nply(Board *board, int alpha, int beta, int max_depth, Side s)
@@ -337,8 +420,6 @@ MoveValue Player::minimax_nply(Board *board, int alpha, int beta, int max_depth,
         return bestMove;
     }
 } 
-
-
 
 vector<Move*> Player::validMoves(Board* b, Side s)
 {

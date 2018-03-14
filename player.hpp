@@ -22,8 +22,8 @@ public:
 	MoveValue minimax_nply(Board *board, int alpha, int beta, int max_depth, Side s); //n ply
 	vector<Move*> validMoves(Board* b, Side s);
 	void setBoard(Board* board);
+	int hscore(Board *board, Move *m);
 	int score(Board *board);
-
 
 
     // Flag to tell if the player is running within the test_minimax context
